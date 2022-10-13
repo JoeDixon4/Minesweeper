@@ -9,7 +9,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-  	<sonar.organization>joedixon4</sonar.organization>
+  	<sonar.organization>joedixon4-1</sonar.organization>
   	<sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <maven.compiler.source>19</maven.compiler.source>
         <maven.compiler.target>19</maven.compiler.target>
