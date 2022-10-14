@@ -96,12 +96,12 @@ public class Main {
         }
         return untouchedBombs;
     }
-    public static int flaggedBombs(int difficulty, Block[][] gameBoard){
+    public static int flaggedBombs(int difficulty, Block[][] Board){
         int flaggedBombs = 0;
         for(int i = 0; i < difficulty; i++){
             for(int j = 0; j < difficulty; j++) {
-                if(gameBoard[i][j].getFlag() == gameBoard[i][j].getBomb()){
-                    if(gameBoard[i][j].getBomb())
+                if(Board[i][j].getFlag() == Board[i][j].getBomb()){
+                    if(Board[i][j].getBomb())
                     {
                         flaggedBombs++;
                     }

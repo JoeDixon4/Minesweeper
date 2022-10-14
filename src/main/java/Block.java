@@ -9,7 +9,7 @@ public class Block {
     public Block(){}
     //Methods
     public void giveBomb(){
-        this.bomb = true;
+        this.bomb = !this.bomb;
     }
     public void giveFlag(){
         this.flag = !this.flag;
@@ -24,7 +24,7 @@ public class Block {
        return this.untouched;
     }
     public void touchCell(){
-        this.untouched = false;
+        this.untouched = !this.untouched;
     }
     public void giveNearby(){
         this.nearbyBombs++;
