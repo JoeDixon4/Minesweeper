@@ -67,6 +67,49 @@ public class Main {
         }
         return continueGame;
     }
+    public static void drawBoard(int difficulty, Block[][] gameBoard){
+        for(int i = 0; i < difficulty; i++) {
+            System.out.print(" " + i);
+            for (int j = 0; j < difficulty; j++) {
+                boolean flag = gameBoard[i][j].getFlag();
+                boolean untouched = gameBoard[i][j].getUntouched();
+                if (flag) {
+                    System.out.print(ConsoleColours.RED_BRIGHT + "  F  " + ConsoleColours.RESET);
+                } else if (untouched) {
+                    System.out.print(ConsoleColours.WHITE_BRIGHT + "  X  " + ConsoleColours.RESET);
+                } else{
+                    int bombs = gameBoard[i][j].getNearbyBombs();
+                    System.out.print(ConsoleColours.YELLOW_BRIGHT + "  " + bombs + "  " + ConsoleColours.RESET);
+                }
+            }
+            System.out.println("\n");
+        }
+    }
+    public static int untouchedBombs(int difficulty, Block[][] gameBoard){
+        int untouchedBombs = 0;
+        for(int i = 0; i < difficulty; i++){
+            for(int j = 0; j < difficulty; j++){
+                if(gameBoard[i][j].getUntouched() == gameBoard[i][j].getBomb()) {
+                    untouchedBombs++;
+                }
+            }
+        }
+        return untouchedBombs;
+    }
+    public static int flaggedBombs(int difficulty, Block[][] gameBoard){
+        int flaggedBombs = 0;
+        for(int i = 0; i < difficulty; i++){
+            for(int j = 0; j < difficulty; j++) {
+                if(gameBoard[i][j].getFlag() == gameBoard[i][j].getBomb()){
+                    if(gameBoard[i][j].getBomb())
+                    {
+                        flaggedBombs++;
+                    }
+                }
+            }
+        }
+        return flaggedBombs;
+    }
     public static void playGame(int difficulty){
         boolean continueGame = true;
         Block[][] gameBoard = new Block[difficulty][difficulty];
@@ -91,6 +134,32 @@ public class Main {
             }
             System.out.println("\n");
         }//Drawing the initial Board
+        int totalBombs = plantBombs(difficulty, gameBoard);//planting the bombs
+        while (continueGame) {
+            System.out.println("Please enter the X position of the cell you would like to click or flag");
+            Scanner choiceY = new Scanner(System.in);
+            int positionY = choiceY.nextInt();
+            System.out.println("Please enter the y position of the cell you would like to click or flag");
+            Scanner choiceX = new Scanner(System.in);
+            int positionX = choiceX.nextInt();
+            System.out.println("Please select if you would like to flag or click the chosen cell [" + positionY + "," + positionX + "] (f/c)");
+            Scanner clickChoice = new Scanner(System.in);
+            String clickFlag = clickChoice.nextLine();
+            continueGame = clickBlock(clickFlag,gameBoard,positionX,positionY,difficulty);
+            for(int i = 0; i < difficulty;i++){
+                System.out.print("    " + i);
+            }
+            System.out.print("\n");
+            drawBoard(difficulty, gameBoard);
+            int untouchedBombs = untouchedBombs(difficulty,gameBoard);
+            int flaggedBombs = flaggedBombs(difficulty,gameBoard);
+            if(flaggedBombs == totalBombs || untouchedBombs == totalBombs){
+                System.out.print(ConsoleColours.GREEN_BRIGHT + "You win the game!!!!" + ConsoleColours.RESET);
+                break;
+            }
+        }//Gameplay loop. Asking for co-ords and click/flag
+    }
+    public static int plantBombs(int difficulty, Block[][] gameBoard){
         int totalBombs = 0;
         switch (difficulty) {
             case 10://15% of the grid has a bomb
@@ -136,58 +205,8 @@ public class Main {
                     }
                 }
                 break;
-        }//Planting Bombs
-        while (continueGame) {
-            System.out.println("Please enter the X position of the cell you would like to click or flag");
-            Scanner choiceY = new Scanner(System.in);
-            int positionY = choiceY.nextInt();
-            System.out.println("Please enter the y position of the cell you would like to click or flag");
-            Scanner choiceX = new Scanner(System.in);
-            int positionX = choiceX.nextInt();
-            System.out.println("Please select if you would like to flag or click the chosen cell [" + positionY + "," + positionX + "] (f/c)");
-            Scanner clickChoice = new Scanner(System.in);
-            String clickFlag = clickChoice.nextLine();
-            continueGame = clickBlock(clickFlag,gameBoard,positionX,positionY,difficulty);
-            for(int i = 0; i < difficulty;i++){
-                System.out.print("    " + i);
-            }
-            System.out.print("\n");
-            for(int i = 0; i < difficulty; i++) {
-                System.out.print(" " + i);
-                for (int j = 0; j < difficulty; j++) {
-                    boolean flag = gameBoard[i][j].getFlag();
-                    boolean untouched = gameBoard[i][j].getUntouched();
-                    if (flag) {
-                        System.out.print(ConsoleColours.RED_BRIGHT + "  F  " + ConsoleColours.RESET);
-                    } else if (untouched) {
-                        System.out.print(ConsoleColours.WHITE_BRIGHT + "  X  " + ConsoleColours.RESET);
-                    } else{
-                        int bombs = gameBoard[i][j].getNearbyBombs();
-                        System.out.print(ConsoleColours.YELLOW_BRIGHT + "  " + bombs + "  " + ConsoleColours.RESET);
-                    }
-                }
-                System.out.println("\n");
-            }
-            int untouchedBombs = 0;
-            int flaggedBombs = 0;
-            for(int i = 0; i < difficulty; i++){
-                for(int j = 0; j < difficulty; j++){
-                    if(gameBoard[i][j].getUntouched() == gameBoard[i][j].getBomb()) {
-                        untouchedBombs++;
-                    }
-                    if(gameBoard[i][j].getFlag() == gameBoard[i][j].getBomb()){
-                        if(gameBoard[i][j].getBomb())
-                        {
-                            flaggedBombs++;
-                        }
-                    }
-                }
-            }
-            if(flaggedBombs == totalBombs || untouchedBombs == totalBombs){
-                System.out.print(ConsoleColours.GREEN_BRIGHT + "You win the game!!!!" + ConsoleColours.RESET);
-                break;
-            }
-        }//Gameplay loop. Asking for co-ords and click/flag
+        }
+        return totalBombs;
     }
 
     public static void main(String[] args) {
