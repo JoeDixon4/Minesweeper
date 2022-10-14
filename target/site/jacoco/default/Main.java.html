@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Main.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MavenMinesweeper</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Main.java</span></div><h1>Main.java</h1><pre class="source lang-java linenums">import java.util.Scanner;
+import java.util.Random;
+
+
+<span class="nc" id="L5">public class Main {</span>
+    public static int getDifficulty(){
+
+<span class="nc" id="L8">        Scanner myObj = new Scanner(System.in);</span>
+<span class="nc" id="L9">        int difficultyChoice = 0;</span>
+<span class="nc bnc" id="L10" title="All 4 branches missed.">        while (difficultyChoice &lt; 1 || difficultyChoice &gt; 3 ){</span>
+<span class="nc" id="L11">            System.out.println(&quot;Please choose a difficulty:&quot;);</span>
+<span class="nc" id="L12">            System.out.println(&quot;1.Easy (10x10)&quot;);</span>
+<span class="nc" id="L13">            System.out.println(&quot;2.Medium (20x20)&quot;);</span>
+<span class="nc" id="L14">            System.out.println(&quot;3.Hard (30x30)&quot;);</span>
+
+<span class="nc" id="L16">            difficultyChoice = myObj.nextInt();</span>
+        }
+
+<span class="nc" id="L19">        return difficultyChoice * 10;</span>
+    }
+    public static boolean clickBlock(String clickFlag, Block[][] gameBoard, int positionX, int positionY, int difficulty){
+<span class="nc" id="L22">        boolean continueGame = true;</span>
+<span class="nc bnc" id="L23" title="All 3 branches missed.">        switch (clickFlag) {</span>
+            default:
+<span class="nc" id="L25">                break;</span>
+            case &quot;f&quot;:
+<span class="nc" id="L27">                gameBoard[positionX][positionY].giveFlag();</span>
+<span class="nc" id="L28">                break;</span>
+            case &quot;c&quot;:
+<span class="nc bnc" id="L30" title="All 2 branches missed.">                if(!gameBoard[positionX][positionY].getFlag()){</span>
+<span class="nc bnc" id="L31" title="All 2 branches missed.">                    if (gameBoard[positionX][positionY].getBomb()) {</span>
+<span class="nc" id="L32">                        gameBoard[positionX][positionY].touchCell();</span>
+<span class="nc" id="L33">                        System.out.println(&quot;You Have Died!&quot;);</span>
+<span class="nc" id="L34">                        continueGame = false;</span>
+<span class="nc" id="L35">                        break;</span>
+<span class="nc bnc" id="L36" title="All 2 branches missed.">                    }else if (gameBoard[positionX][positionY].getUntouched()) {</span>
+<span class="nc" id="L37">                        gameBoard[positionX][positionY].touchCell();</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">                        for (int i = -1; i &lt;= 1; i++) {</span>
+<span class="nc bnc" id="L39" title="All 2 branches missed.">                            for (int j = -1; j &lt;= 1; j++) {</span>
+<span class="nc bnc" id="L40" title="All 4 branches missed.">                                if (positionX + i &gt;= 0 &amp;&amp; positionX + i &lt; difficulty) {</span>
+<span class="nc bnc" id="L41" title="All 4 branches missed.">                                    if (positionY + j &gt;= 0 &amp;&amp; positionY + j &lt; difficulty) {</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">                                        if (gameBoard[positionX + i][positionY + j].getBomb()) {</span>
+<span class="nc" id="L43">                                            gameBoard[positionX][positionY].giveNearby();</span>
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+        }
+<span class="nc bnc" id="L52" title="All 4 branches missed.">        if(gameBoard[positionX][positionY].getNearbyBombs() == 0 &amp;&amp; clickFlag.equals(&quot;c&quot;))</span>
+        {
+<span class="nc bnc" id="L54" title="All 2 branches missed.">            if(!gameBoard[positionX][positionY].getBomb()){</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">                for (int i = -1; i &lt;= 1; i++) {</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">                    for (int j = -1; j &lt;= 1; j++) {</span>
+<span class="nc bnc" id="L57" title="All 4 branches missed.">                        if (positionX + i &gt;= 0 &amp;&amp; positionX + i &lt; difficulty) {</span>
+<span class="nc bnc" id="L58" title="All 4 branches missed.">                            if (positionY + j &gt;= 0 &amp;&amp; positionY + j &lt; difficulty) {</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">                                if (gameBoard[positionX + i][positionY + j].getUntouched()) {</span>
+<span class="nc" id="L60">                                    clickBlock(clickFlag,gameBoard,positionX+i,positionY+j,difficulty);</span>
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+<span class="nc" id="L68">        return continueGame;</span>
+    }
+    public static void drawBoard(int difficulty, Block[][] gameBoard){
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        for(int i = 0; i &lt; difficulty; i++) {</span>
+<span class="nc" id="L72">            System.out.print(&quot; &quot; + i);</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">            for (int j = 0; j &lt; difficulty; j++) {</span>
+<span class="nc" id="L74">                boolean flag = gameBoard[i][j].getFlag();</span>
+<span class="nc" id="L75">                boolean untouched = gameBoard[i][j].getUntouched();</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">                if (flag) {</span>
+<span class="nc" id="L77">                    System.out.print(ConsoleColours.RED_BRIGHT + &quot;  F  &quot; + ConsoleColours.RESET);</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">                } else if (untouched) {</span>
+<span class="nc" id="L79">                    System.out.print(ConsoleColours.WHITE_BRIGHT + &quot;  X  &quot; + ConsoleColours.RESET);</span>
+                } else{
+<span class="nc" id="L81">                    int bombs = gameBoard[i][j].getNearbyBombs();</span>
+<span class="nc" id="L82">                    System.out.print(ConsoleColours.YELLOW_BRIGHT + &quot;  &quot; + bombs + &quot;  &quot; + ConsoleColours.RESET);</span>
+                }
+            }
+<span class="nc" id="L85">            System.out.println(&quot;\n&quot;);</span>
+        }
+<span class="nc" id="L87">    }</span>
+    public static int untouchedBombs(int difficulty, Block[][] gameBoard){
+<span class="nc" id="L89">        int untouchedBombs = 0;</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">        for(int i = 0; i &lt; difficulty; i++){</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">            for(int j = 0; j &lt; difficulty; j++){</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">                if(gameBoard[i][j].getUntouched() == gameBoard[i][j].getBomb()) {</span>
+<span class="nc" id="L93">                    untouchedBombs++;</span>
+                }
+            }
+        }
+<span class="nc" id="L97">        return untouchedBombs;</span>
+    }
+    public static int flaggedBombs(int difficulty, Block[][] gameBoard){
+<span class="nc" id="L100">        int flaggedBombs = 0;</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">        for(int i = 0; i &lt; difficulty; i++){</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">            for(int j = 0; j &lt; difficulty; j++) {</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">                if(gameBoard[i][j].getFlag() == gameBoard[i][j].getBomb()){</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">                    if(gameBoard[i][j].getBomb())</span>
+                    {
+<span class="nc" id="L106">                        flaggedBombs++;</span>
+                    }
+                }
+            }
+        }
+<span class="nc" id="L111">        return flaggedBombs;</span>
+    }
+    public static void playGame(int difficulty){
+<span class="nc" id="L114">        boolean continueGame = true;</span>
+<span class="nc" id="L115">        Block[][] gameBoard = new Block[difficulty][difficulty];</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">        for (int i = 0; i &lt; difficulty; i++) {</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">            for (int j = 0; j &lt; difficulty; j++) {</span>
+<span class="nc" id="L118">                Block gameBlock = new Block();</span>
+<span class="nc" id="L119">                gameBoard[i][j] = gameBlock;</span>
+            }
+        }//Making the Cells
+<span class="nc bnc" id="L122" title="All 2 branches missed.">        for (int i = 0; i &lt; difficulty; i++){</span>
+<span class="nc" id="L123">            System.out.print(&quot;    &quot; + i);</span>
+        }
+<span class="nc" id="L125">        System.out.print(&quot;\n&quot;);</span>
+<span class="nc bnc" id="L126" title="All 2 branches missed.">        for (int i = 0; i &lt; difficulty; i++) {</span>
+<span class="nc" id="L127">            System.out.print(&quot; &quot; + i);</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">            for (int j = 0; j &lt; difficulty; j++) {</span>
+<span class="nc" id="L129">                boolean untouched = gameBoard[i][j].getUntouched();</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">                if (untouched) {</span>
+<span class="nc" id="L131">                    System.out.print(ConsoleColours.WHITE_BRIGHT + &quot;  X  &quot; +ConsoleColours.RESET);</span>
+                }
+
+            }
+<span class="nc" id="L135">            System.out.println(&quot;\n&quot;);</span>
+        }//Drawing the initial Board
+<span class="nc" id="L137">        int totalBombs = plantBombs(difficulty, gameBoard);//planting the bombs</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">        while (continueGame) {</span>
+<span class="nc" id="L139">            System.out.println(&quot;Please enter the X position of the cell you would like to click or flag&quot;);</span>
+<span class="nc" id="L140">            Scanner choiceY = new Scanner(System.in);</span>
+<span class="nc" id="L141">            int positionY = choiceY.nextInt();</span>
+<span class="nc" id="L142">            System.out.println(&quot;Please enter the y position of the cell you would like to click or flag&quot;);</span>
+<span class="nc" id="L143">            Scanner choiceX = new Scanner(System.in);</span>
+<span class="nc" id="L144">            int positionX = choiceX.nextInt();</span>
+<span class="nc" id="L145">            System.out.println(&quot;Please select if you would like to flag or click the chosen cell [&quot; + positionY + &quot;,&quot; + positionX + &quot;] (f/c)&quot;);</span>
+<span class="nc" id="L146">            Scanner clickChoice = new Scanner(System.in);</span>
+<span class="nc" id="L147">            String clickFlag = clickChoice.nextLine();</span>
+<span class="nc" id="L148">            continueGame = clickBlock(clickFlag,gameBoard,positionX,positionY,difficulty);</span>
+<span class="nc bnc" id="L149" title="All 2 branches missed.">            for(int i = 0; i &lt; difficulty;i++){</span>
+<span class="nc" id="L150">                System.out.print(&quot;    &quot; + i);</span>
+            }
+<span class="nc" id="L152">            System.out.print(&quot;\n&quot;);</span>
+<span class="nc" id="L153">            drawBoard(difficulty, gameBoard);</span>
+<span class="nc" id="L154">            int untouchedBombs = untouchedBombs(difficulty,gameBoard);</span>
+<span class="nc" id="L155">            int flaggedBombs = flaggedBombs(difficulty,gameBoard);</span>
+<span class="nc bnc" id="L156" title="All 4 branches missed.">            if(flaggedBombs == totalBombs || untouchedBombs == totalBombs){</span>
+<span class="nc" id="L157">                System.out.print(ConsoleColours.GREEN_BRIGHT + &quot;You win the game!!!!&quot; + ConsoleColours.RESET);</span>
+<span class="nc" id="L158">                break;</span>
+            }
+<span class="nc" id="L160">        }//Gameplay loop. Asking for co-ords and click/flag</span>
+<span class="nc" id="L161">    }</span>
+    public static int plantBombs(int difficulty, Block[][] gameBoard){
+<span class="nc" id="L163">        int totalBombs = 0;</span>
+<span class="nc bnc" id="L164" title="All 4 branches missed.">        switch (difficulty) {</span>
+            case 10://15% of the grid has a bomb
+
+<span class="nc bnc" id="L167" title="All 2 branches missed.">                for (int i = 0; i &lt; 15; i++) {</span>
+<span class="nc" id="L168">                    Random randX = new Random();</span>
+<span class="nc" id="L169">                    Random randY = new Random();</span>
+<span class="nc" id="L170">                    int positionX = randX.nextInt(10);</span>
+<span class="nc" id="L171">                    int positionY = randY.nextInt(10);</span>
+<span class="nc bnc" id="L172" title="All 2 branches missed.">                    if (gameBoard[positionX][positionY].getBomb()) {</span>
+<span class="nc" id="L173">                        i--;//this is a check to see if the cell already has a bomb</span>
+                    } else {
+<span class="nc" id="L175">                        gameBoard[positionX][positionY].giveBomb();</span>
+<span class="nc" id="L176">                        totalBombs++;</span>
+                    }
+                }
+<span class="nc" id="L179">                break;</span>
+            case 20://20% of the grid has a bomb
+<span class="nc bnc" id="L181" title="All 2 branches missed.">                for (int i = 0; i &lt; 80; i++) {</span>
+<span class="nc" id="L182">                    Random randX = new Random();</span>
+<span class="nc" id="L183">                    Random randY = new Random();</span>
+<span class="nc" id="L184">                    int positionX = randX.nextInt(20);</span>
+<span class="nc" id="L185">                    int positionY = randY.nextInt(20);</span>
+<span class="nc bnc" id="L186" title="All 2 branches missed.">                    if (gameBoard[positionX][positionY].getBomb()) {</span>
+<span class="nc" id="L187">                        i--;//this is a check to see if the cell already has a bomb</span>
+                    } else {
+<span class="nc" id="L189">                        gameBoard[positionX][positionY].giveBomb();</span>
+<span class="nc" id="L190">                        totalBombs++;</span>
+                    }
+                }
+<span class="nc" id="L193">                break;</span>
+            case 30://33% of the grid has a bomb
+<span class="nc bnc" id="L195" title="All 2 branches missed.">                for (int i = 0; i &lt; 300; i++) {</span>
+<span class="nc" id="L196">                    Random randX = new Random();</span>
+<span class="nc" id="L197">                    Random randY = new Random();</span>
+<span class="nc" id="L198">                    int positionX = randX.nextInt(30);</span>
+<span class="nc" id="L199">                    int positionY = randY.nextInt(30);</span>
+<span class="nc bnc" id="L200" title="All 2 branches missed.">                    if (gameBoard[positionX][positionY].getBomb()) {</span>
+<span class="nc" id="L201">                        i--;//this is a check to see if the cell already has a bomb</span>
+                    } else {
+<span class="nc" id="L203">                        gameBoard[positionX][positionY].giveBomb();</span>
+<span class="nc" id="L204">                        totalBombs++;</span>
+                    }
+                }
+                break;
+        }
+<span class="nc" id="L209">        return totalBombs;</span>
+    }
+
+    public static void main(String[] args) {
+<span class="nc" id="L213">        String replay = &quot;y&quot;;</span>
+<span class="nc bnc" id="L214" title="All 2 branches missed.">        while(replay.equals(&quot;y&quot;)){</span>
+<span class="nc" id="L215">            int difficulty = getDifficulty();</span>
+<span class="nc" id="L216">            playGame(difficulty);</span>
+<span class="nc" id="L217">            replay = &quot;x&quot;;</span>
+<span class="nc bnc" id="L218" title="All 4 branches missed.">            while(!replay.equals(&quot;y&quot;) &amp;&amp; !replay.equals(&quot;n&quot;)){</span>
+<span class="nc" id="L219">                System.out.print(ConsoleColours.WHITE_BRIGHT + &quot;Would you like to play again?(y/n)&quot; + ConsoleColours.RESET);</span>
+<span class="nc" id="L220">                Scanner choice = new Scanner(System.in);</span>
+<span class="nc" id="L221">                replay = choice.nextLine();</span>
+<span class="nc" id="L222">            }</span>
+<span class="nc" id="L223">        }</span>
+<span class="nc" id="L224">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
