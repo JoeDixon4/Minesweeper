@@ -1,5 +1,3 @@
-import java.util.Scanner;
-import java.io.IOException;
 
 public class Block {
     //Attributes
@@ -7,12 +5,8 @@ public class Block {
     boolean flag = false;
     boolean untouched = true;
     int nearbyBombs;
-
     //Constructor
-    public Block(){
-
-    }
-
+    public Block(){}
     //Methods
     public void giveBomb(){
         this.bomb = true;
@@ -21,20 +15,10 @@ public class Block {
         this.flag = !this.flag;
     }
     public boolean getFlag(){
-        if(this.flag == true){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return this.flag;
     }
     public boolean getBomb(){
-        if(this.bomb == true){
-            return true;
-        }
-        else{
-            return false;
-        }
+    return this.bomb;
     }
     public boolean getUntouched(){
        return this.untouched;
